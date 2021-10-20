@@ -1,0 +1,1 @@
+module.exports = [ "SPRINTER", "SMALL STRAIGHT", "LARGE STRAIGHT" ]
