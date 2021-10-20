@@ -30,7 +30,7 @@ async function getTruck(req, res) {
   try {
     const truck = await Truck.findById(req.params.id);
     if (!truck) {
-      res.status(400).json({message: "Truck doesn't exist"})
+      res.status(400).json({ message: "Truck doesn't exist" });
     }
     res.status(200).json({ truck });
   } catch (e) {
@@ -40,14 +40,17 @@ async function getTruck(req, res) {
 
 async function updateTruck(req, res) {
   const { type } = req.body;
+  const assignedTruck = await Truck.findOne({ assigned_to: req.userId });
+  if (assignedTruck.status === "OL") {
+    return res
+      .status(400)
+      .json({ message: "You can't do this while being on load" });
+  }
   if (!types.includes(type)) {
     res.status(400).json({ message: "Wrong truck type" });
   }
   try {
-    const truck = await Truck.updateOne(
-      { _id: req.params.id },
-      { type: req.body.type }
-    );
+    await Truck.updateOne({ _id: req.params.id }, { type: req.body.type });
     res.status(200).json({ message: "Truck details changed successfully" });
   } catch (e) {
     res.status(500).json({ message: "Server error" });
@@ -57,24 +60,30 @@ async function updateTruck(req, res) {
 async function deleteTruck(req, res) {
   try {
     await Truck.deleteOne({ _id: req.params.id });
-    res.status(200).json({message: "Truck deleted successfully"})
+    res.status(200).json({ message: "Truck deleted successfully" });
   } catch (e) {
     res.status(500).json({ message: "Server error" });
   }
 }
 
-async function assignTruck (req, res) {
+async function assignTruck(req, res) {
   try {
-    const assignedTrucks = await Truck.find({assigned_to: req.userId})
-    if (assignedTrucks.length !== 0) {
-      res.status(400).json({message: "You already have assigned truck"})
+    const assignedTruck = await Truck.findOne({ assigned_to: req.userId });
+    if (assignedTruck) {
+      if (assignedTruck.status === "OL") {
+        return res
+          .status(400)
+          .json({ message: "You can't do this while being on load" });
+      }
+      assignedTruck.assigned_to = null;
+      await assignedTruck.save();
     }
 
     const truck = await Truck.updateOne(
       { _id: req.params.id },
       { assigned_to: req.userId }
     );
-    res.status(200).json({ message: "Truck details changed successfully" });
+    res.status(200).json({ message: "Truck assigned successfully" });
   } catch (e) {
     res.status(500).json({ message: "Server error" });
   }
@@ -86,5 +95,5 @@ module.exports = {
   getTruck,
   updateTruck,
   deleteTruck,
-  assignTruck
+  assignTruck,
 };

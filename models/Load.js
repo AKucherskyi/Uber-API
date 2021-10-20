@@ -1,6 +1,6 @@
 const { Schema, model } = require("mongoose");
 const status = require("../config/loadStatus");
-const state = require("../config/loadState");
+const state = require("../config/loadStates");
 
 const schema = new Schema({
   name: { type: String, required: true },
@@ -22,6 +22,7 @@ const schema = new Schema({
       time: { type: String, default: new Date().toISOString() },
     },
   ],
+  created_date: {type: String, default: new Date().toISOString()}
 });
 
 module.exports = model("Load", schema);
