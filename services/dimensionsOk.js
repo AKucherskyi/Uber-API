@@ -1,5 +1,4 @@
 module.exports = (load, truck) => {
-    console.log(load, truck)
   switch (truck.type) {
     case "SPRINTER":
       if (

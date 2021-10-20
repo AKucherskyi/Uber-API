@@ -2,6 +2,7 @@ const Load = require("../models/Load");
 const dimensionsOk = require("../services/dimensionsOk");
 const loadStates = require("../config/loadStates");
 const Truck = require("../models/Truck");
+const User = require("../models/User");
 
 async function addLoad(req, res) {
   try {
@@ -18,8 +19,23 @@ async function addLoad(req, res) {
 }
 
 async function getLoads(req, res) {
+  let { status, limit, offset } = req.query;
+  limit = limit || 10;
+  offset = offset || 0;
   try {
-    const loads = await Load.find({ created_by: req.userId });
+    const user = await User.findById(req.userId);
+    let loads = null
+
+    if (user.role === "SHIPPER") {
+      loads = await Load.find({ created_by: req.userId });
+    } else {
+      loads = await Load.find({ assigned_to: req.userId });
+    }
+
+    if (status) {
+      loads = loads.filter((load) => load.status === status);
+    }
+    loads = loads.splice(offset, limit);
     res.status(200).json({ loads });
   } catch (e) {
     res.status(500).json({ message: "Server error" });
