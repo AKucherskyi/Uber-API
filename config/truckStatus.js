@@ -1,1 +1,1 @@
-module.exports = ["OL", "IS"]
+module.exports = ['OL', 'IS'];

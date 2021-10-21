@@ -1,6 +1,6 @@
 module.exports = (load, truck) => {
   switch (truck.type) {
-    case "SPRINTER":
+    case 'SPRINTER':
       if (
         load.payload > 1700 ||
         load.dimensions.length > 300 ||
@@ -12,7 +12,7 @@ module.exports = (load, truck) => {
         return true;
       }
 
-    case "SMALL STRAIGHT":
+    case 'SMALL STRAIGHT':
       if (
         load.payload > 2500 ||
         load.dimensions.length > 500 ||
@@ -24,7 +24,7 @@ module.exports = (load, truck) => {
         return true;
       }
 
-    case "LARGE STRAIGHT":
+    case 'LARGE STRAIGHT':
       if (
         load.payload > 4000 ||
         load.dimensions.length > 700 ||

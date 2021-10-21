@@ -1,1 +1,1 @@
-module.exports = [ "SPRINTER", "SMALL STRAIGHT", "LARGE STRAIGHT" ]
+module.exports = ['SPRINTER', 'SMALL STRAIGHT', 'LARGE STRAIGHT'];

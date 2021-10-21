@@ -1,1 +1,1 @@
-module.exports = ["SHIPPER", "DRIVER"]
+module.exports = ['SHIPPER', 'DRIVER'];

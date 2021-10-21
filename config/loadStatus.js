@@ -1,1 +1,1 @@
-module.exports = [ "NEW", "POSTED", "ASSIGNED", "SHIPPED" ]
+module.exports = ['NEW', 'POSTED', 'ASSIGNED', 'SHIPPED'];
